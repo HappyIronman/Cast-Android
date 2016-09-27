@@ -26,6 +26,7 @@ public class Constant {
     public static Bitmap stone_dark_bitmap;
     public static Bitmap stone_light_bitmap;
     public static Bitmap grass_bitmap;
+    public static Bitmap tree_bitmap;
 
     public static final float[] textureOrderF = new float[]{
             0.0f, 0.0f,

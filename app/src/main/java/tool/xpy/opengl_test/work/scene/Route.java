@@ -11,26 +11,32 @@ public class Route implements Drawable{
 
     public final static float stone_width = .4f;
     public final static float grass_width = 40;
+    public final static float tree_width = 40;
 
     private XRect mainRoute;
     private XRect stone_left0, stone_left1;
     private XRect stone_right0, stone_right1;
     private XRect left_grass, right_grass;
+    private XRect left_tree,right_tree;
 
     private final float[] route_ambient = {.01f, .01f, .01f, 1};
     private final float[] grass_ambient = {.01f, .01f, .01f, 1};
     private final float[] stone_dark_ambient = {.01f, .01f, .01f, 1};
     private final float[] stone_light_ambient = {.01f, .01f, .01f, 1};
+    private final float[] tree_ambient = {.01f, .01f, .01f, 1};
+
 
     private final float[] route_specular = {.01f, .01f, .01f, 1};
     private final float[] grass_specular = {.01f, .01f, .01f, 1};
     private final float[] stone_dark_specular = {.01f, .01f, .01f, 1};
     private final float[] stone_light_specular = {.01f, .01f, .01f, 1};
+    private final float[] tree_specular = {.01f, .01f, .01f, 1};
 
     private final float[] route_diffuse = {.8f, .8f, .8f, 1};
     private final float[] grass_diffuse = {.8f, .8f, .8f, 1};
     private final float[] stone_dark_diffuse = {.8f, .8f, .8f, 1};
     private final float[] stone_light_diffuse = {.8f, .8f, .8f, 1};
+    private final float[] tree_diffuse = {.8f, .8f, .8f, 1};
 
     private void configure(float route_x, float route_width){
         float route_h_times = route_width / 2;
@@ -41,6 +47,9 @@ public class Route implements Drawable{
         // use scale value: .1
         float grass_h_times = grass_width / 2;
         float grass_v_times = Constant.FrontLength / 2;
+        //tree
+        float tree_h_times = tree_width / 40;
+        float tree_v_times = Constant.FrontLength / 40;
 
         mainRoute.setValue_Ambient(route_ambient);
         stone_left0.setValue_Ambient(stone_dark_ambient);
@@ -49,6 +58,8 @@ public class Route implements Drawable{
         stone_right1.setValue_Ambient(stone_light_ambient);
         left_grass.setValue_Ambient(grass_ambient);
         right_grass.setValue_Ambient(grass_ambient);
+        left_tree.setValue_Ambient(tree_ambient);
+        right_tree.setValue_Ambient(tree_ambient);
 
         mainRoute.setValue_Specular(route_specular);
         stone_left0.setValue_Specular(stone_dark_specular);
@@ -57,6 +68,8 @@ public class Route implements Drawable{
         stone_right1.setValue_Specular(stone_light_specular);
         left_grass.setValue_Specular(grass_specular);
         right_grass.setValue_Specular(grass_specular);
+        left_tree.setValue_Specular(tree_specular);
+        right_tree.setValue_Specular(tree_specular);
 
         mainRoute.setValue_Diffuse(route_diffuse);
         stone_left0.setValue_Diffuse(stone_dark_diffuse);
@@ -65,6 +78,8 @@ public class Route implements Drawable{
         stone_right1.setValue_Diffuse(stone_light_diffuse);
         left_grass.setValue_Diffuse(grass_diffuse);
         right_grass.setValue_Diffuse(grass_diffuse);
+        left_tree.setValue_Diffuse(tree_diffuse);
+        right_tree.setValue_Diffuse(tree_diffuse);
 
         mainRoute.setNormalVector(0, 0, 1);
         stone_left0.setNormalVector(1, 0, 0);
@@ -73,6 +88,8 @@ public class Route implements Drawable{
         stone_right1.setNormalVector(0, 0, 1);
         left_grass.setNormalVector(0, 0, 1);
         right_grass.setNormalVector(0, 0, 1);
+        left_tree.setNormalVector(1,0,0);//
+        right_tree.setNormalVector(1,0,0);
 
         mainRoute.setRepeatMatrix(route_h_times, route_v_times, false);
         stone_left0.setRepeatMatrix(stone_h_times, stone_v_times, true);
@@ -81,6 +98,8 @@ public class Route implements Drawable{
         stone_right1.setRepeatMatrix(stone_h_times, stone_v_times, false);
         left_grass.setRepeatMatrix(grass_h_times, grass_v_times, false);
         right_grass.setRepeatMatrix(grass_h_times, grass_v_times, false);
+        left_tree.setRepeatMatrix(tree_h_times,tree_v_times,true);
+        right_tree.setRepeatMatrix(tree_h_times,tree_v_times,true);
     }
 
 
@@ -109,6 +128,10 @@ public class Route implements Drawable{
                 0, -grass_width, Constant.FrontLength);
         right_grass = new XRect(XRect.XY_PANEL, route_x + route_width + 0.1f, 0,
                 0, grass_width, Constant.FrontLength);
+        left_tree = new XRect(XRect.YZ_PANEL, route_x - 4.8f, 0,
+                0,  Constant.FrontLength,tree_width/3);
+        right_tree = new XRect(XRect.YZ_PANEL, route_x + route_width + 6.4f, 0,
+                0,  Constant.FrontLength,tree_width/3);
 
         configure(route_x, route_width);
     }
@@ -121,6 +144,8 @@ public class Route implements Drawable{
         stone_right0.loadTexture(Constant.stone_dark_bitmap, gl, leftView);
         left_grass.loadTexture(Constant.grass_bitmap, gl, leftView);
         right_grass.loadTexture(Constant.grass_bitmap, gl, leftView);
+        left_tree.loadTexture(Constant.tree_bitmap, gl, leftView);
+        right_tree.loadTexture(Constant.tree_bitmap, gl, leftView);
     }
 
     public void draw(GL10 gl, boolean leftView){
@@ -131,6 +156,8 @@ public class Route implements Drawable{
         stone_right1.draw(gl, leftView);
         left_grass.draw(gl, leftView);
         right_grass.draw(gl, leftView);
+        left_tree.draw(gl, leftView);
+        right_tree.draw(gl, leftView);
         //line0.draw(gl, camera);
     }
 }

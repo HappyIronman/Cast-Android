@@ -5,6 +5,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.opengl.GLSurfaceView;
@@ -32,8 +36,29 @@ import tool.xpy.opengl_test.work.net.MySocket;
 //****************************************************************
 import tool.xpy.opengl_test.work.util.Constant;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements SensorEventListener {
+    SensorManager sensorManager;
+    Sensor sensor;
+    @Override
+    public void onSensorChanged(SensorEvent sensorEvent) {
+        if(sensorEvent.sensor.getType()==Sensor.TYPE_GYROSCOPE)
+        {
+            showInfo("事件：" + " x:" + sensorEvent.values[0] + " y:" + sensorEvent.values[1]  + " z:" + sensorEvent.values[2]);
 
+
+
+        }
+    }
+    private void showInfo(String info)
+    {
+        //Log.v("陀螺仪",info);
+
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }
     public class MyHandler extends Handler{
         public MyHandler(Looper l) {super(l);}
         @Override
@@ -78,6 +103,8 @@ public class MainActivity extends Activity {
                 getResources(), R.mipmap.stone_dark);
         Constant.grass_bitmap = BitmapFactory.decodeResource(
                 getResources(), R.mipmap.grass);
+        Constant.tree_bitmap = BitmapFactory.decodeResource(
+                getResources(), R.mipmap.tree1);
 
     }
 
@@ -188,6 +215,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadResource();
+        //陀螺仪部分
+        sensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
 
         //videoView.setEGLContextClientVersion(2);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -208,6 +237,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        sensorManager.unregisterListener(this);
         videoView0.onPause();
         videoView1.onPause();
     }
@@ -215,6 +245,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        sensor=sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
+        sensorManager.registerListener(this,sensor, SensorManager.SENSOR_DELAY_NORMAL);
         videoView0.onResume();
         videoView1.onResume();
     }
