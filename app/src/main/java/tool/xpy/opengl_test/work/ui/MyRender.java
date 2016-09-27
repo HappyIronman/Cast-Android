@@ -31,8 +31,8 @@ public class MyRender implements GLSurfaceView.Renderer {
 
     private Scene myScene = null;
 
-    private float eyeX = 0, eyeY = 3, eyeZ = 1.8f;
-    private float viewX = 0, viewY = 1000, viewZ = eyeZ;
+    public float eyeX = 0, eyeY = 3, eyeZ = 1.8f;
+    public float viewX = 0, viewY = 1000, viewZ = eyeZ;
     private float[] sky_color = {.6f, .6f, 1, 0};
 
     @Override

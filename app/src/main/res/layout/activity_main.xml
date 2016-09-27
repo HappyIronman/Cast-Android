@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -14,13 +14,13 @@
         android:layout_alignParentStart="true"
         android:weightSum="1">
 
-        <android.opengl.GLSurfaceView
+        <tool.xpy.opengl_test.work.ui.MyGLSurfaceView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/surfaceView"
             android:layout_weight="0.50" />
 
-        <android.opengl.GLSurfaceView
+        <tool.xpy.opengl_test.work.ui.MyGLSurfaceView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/surfaceView2"

@@ -2,21 +2,11 @@ package tool.xpy.opengl_test.work.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
-import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
@@ -25,40 +15,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-
 import tool.xpy.opengl_test.R;
-import tool.xpy.opengl_test.work.scene.Ball;
 import tool.xpy.opengl_test.work.net.MyServer;
-//****************************************************************
-import tool.oyyw.opengl_test.work.MYViewPagerAdapter;
 import tool.xpy.opengl_test.work.net.MySocket;
-//****************************************************************
+import tool.xpy.opengl_test.work.scene.Ball;
 import tool.xpy.opengl_test.work.util.Constant;
 
-public class MainActivity extends Activity implements SensorEventListener {
-    SensorManager sensorManager;
-    Sensor sensor;
-    @Override
-    public void onSensorChanged(SensorEvent sensorEvent) {
-        if(sensorEvent.sensor.getType()==Sensor.TYPE_GYROSCOPE)
-        {
-            showInfo("事件：" + " x:" + sensorEvent.values[0] + " y:" + sensorEvent.values[1]  + " z:" + sensorEvent.values[2]);
+//****************************************************************
+//****************************************************************
 
+public class MainActivity extends Activity {
 
-
-        }
-    }
-    private void showInfo(String info)
-    {
-        //Log.v("陀螺仪",info);
-
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
-    }
     public class MyHandler extends Handler{
         public MyHandler(Looper l) {super(l);}
         @Override
@@ -89,8 +56,8 @@ public class MainActivity extends Activity implements SensorEventListener {
     public MyRender leftRender = null;
     public MyRender rightRender = null;
 
-    public GLSurfaceView videoView0 = null;
-    public GLSurfaceView videoView1 = null;
+    public MyGLSurfaceView videoView0 = null;
+    public MyGLSurfaceView videoView1 = null;
 
     private void loadResource(){
         Constant.ball_bitmap = BitmapFactory.decodeResource(
@@ -104,25 +71,23 @@ public class MainActivity extends Activity implements SensorEventListener {
         Constant.grass_bitmap = BitmapFactory.decodeResource(
                 getResources(), R.mipmap.grass);
         Constant.tree_bitmap = BitmapFactory.decodeResource(
-                getResources(), R.mipmap.tree1);
+                               getResources(), R.mipmap.tree1);
 
     }
 
     private void initializeObject(){
         ball = new Ball();
 
-        leftRender = new MyRender(true);
-        rightRender = new MyRender(false);
 
-        videoView0 = (GLSurfaceView)findViewById(R.id.surfaceView);
-        videoView1 = (GLSurfaceView)findViewById(R.id.surfaceView2);
 
-        videoView0.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
+        videoView0 = (MyGLSurfaceView)findViewById(R.id.surfaceView);
+        videoView1 = (MyGLSurfaceView)findViewById(R.id.surfaceView2);
+        leftRender = videoView0.mrender;
+        rightRender =videoView1.mrender;
+        //videoView0.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 
-        videoView0.setRenderer(leftRender);
+       // videoView0.setRenderer(leftRender);
 
-        videoView1.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
-        videoView1.setRenderer(rightRender);
 
         myServer = new MyServer(ball);
 
@@ -139,8 +104,9 @@ public class MainActivity extends Activity implements SensorEventListener {
         videoView0.setOnClickListener(reset);
         videoView1.setOnClickListener(reset);
 
-        leftRender.setBall(ball);
         rightRender.setBall(ball);
+        leftRender.setBall(ball);
+
 
         /**
          * 改于2016.6.30,添加滑动功能.添加失败》。。。黑影。。。
@@ -215,8 +181,6 @@ public class MainActivity extends Activity implements SensorEventListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         loadResource();
-        //陀螺仪部分
-        sensorManager=(SensorManager)getSystemService(SENSOR_SERVICE);
 
         //videoView.setEGLContextClientVersion(2);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -237,20 +201,25 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override
     protected void onPause() {
         super.onPause();
-        sensorManager.unregisterListener(this);
-        videoView0.onPause();
-        videoView1.onPause();
+        //videoView0.onPause();
+        //videoView1.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        sensor=sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-        sensorManager.registerListener(this,sensor, SensorManager.SENSOR_DELAY_NORMAL);
+        videoView0.enablesensor();
+        videoView1.enablesensor();
         videoView0.onResume();
         videoView1.onResume();
     }
-
+    @Override
+    protected void onStop() {
+        // TODO Auto-generated method stub
+        super.onStop();
+        videoView0.disablesensor();
+        videoView1.disablesensor();
+    }
     @Override
     protected void onDestroy(){
         super.onDestroy();

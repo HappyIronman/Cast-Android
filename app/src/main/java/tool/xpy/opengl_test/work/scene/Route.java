@@ -88,8 +88,8 @@ public class Route implements Drawable{
         stone_right1.setNormalVector(0, 0, 1);
         left_grass.setNormalVector(0, 0, 1);
         right_grass.setNormalVector(0, 0, 1);
-        left_tree.setNormalVector(1,0,0);//
-        right_tree.setNormalVector(1,0,0);
+        left_tree.setNormalVector(0,0,1);//
+        right_tree.setNormalVector(0,0,1);
 
         mainRoute.setRepeatMatrix(route_h_times, route_v_times, false);
         stone_left0.setRepeatMatrix(stone_h_times, stone_v_times, true);
