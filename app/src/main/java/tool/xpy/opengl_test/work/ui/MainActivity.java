@@ -53,8 +53,10 @@ public class MainActivity extends Activity {
     private int port_num;
     //****************************************************************
 
+    public static MainActivity main_activity=null;
     public MyRender leftRender = null;
     public MyRender rightRender = null;
+
 
     public MyGLSurfaceView videoView0 = null;
     public MyGLSurfaceView videoView1 = null;
@@ -76,17 +78,21 @@ public class MainActivity extends Activity {
     }
 
     private void initializeObject(){
+        main_activity=this;
         ball = new Ball();
 
 
 
         videoView0 = (MyGLSurfaceView)findViewById(R.id.surfaceView);
         videoView1 = (MyGLSurfaceView)findViewById(R.id.surfaceView2);
-        leftRender = videoView0.mrender;
-        rightRender =videoView1.mrender;
+
+        leftRender = new MyRender(true);
+        rightRender=new MyRender(false);
+
         //videoView0.setEGLConfigChooser(8, 8, 8, 8, 16, 0);
 
-       // videoView0.setRenderer(leftRender);
+        videoView0.setMrender(leftRender);
+        videoView1.setMrender(rightRender);
 
 
         myServer = new MyServer(ball);
@@ -106,6 +112,7 @@ public class MainActivity extends Activity {
 
         rightRender.setBall(ball);
         leftRender.setBall(ball);
+
 
 
         /**

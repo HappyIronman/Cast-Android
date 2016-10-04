@@ -24,7 +24,13 @@
 
         </activity>
 
+        <receiver android:name="tool.xpy.opengl_test.work.ui.MyBroadcastReceiver">
+            <intent-filter>
+                <action android:name="BOOM" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
+        </receiver>
 
     </application>
 

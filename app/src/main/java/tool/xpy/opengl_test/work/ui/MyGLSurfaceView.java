@@ -21,16 +21,18 @@ public class MyGLSurfaceView extends GLSurfaceView implements SensorEventListene
         super(context,attrs);
         // TODO Auto-generated constructor stub
         msensorManager=(SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
-        mrender = new MyRender(true);
         //setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        setRenderer(mrender);
+        mrender=null;
         ini_angle=0f;
         flag=0;
         enablesensor();
     }
 
 
-
+    public void setMrender(MyRender r){
+        mrender=r;
+        setRenderer(mrender);
+    }
 
       public void enablesensor() {
         msensorManager.registerListener(this, msensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION),SensorManager.SENSOR_DELAY_GAME);
@@ -63,7 +65,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements SensorEventListene
             else {
                 mrender.viewX = ( angle-ini_angle) *10.0f;
                 Log.e("QQQ", "onSensorChanged: " + angle);
-                requestRender();//请求渲染
+
             }
 
 
@@ -76,7 +78,7 @@ public class MyGLSurfaceView extends GLSurfaceView implements SensorEventListene
             if(angle>0) {
                 mrender.eyeZ = 1.8f + (int) (angle/3);
                 Log.e("QQQ", "onSensorChanged: " + angle);
-                requestRender();//请求渲染
+
             }
         }
     }

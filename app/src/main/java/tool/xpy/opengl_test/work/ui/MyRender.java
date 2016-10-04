@@ -27,7 +27,7 @@ import tool.xpy.opengl_test.work.util.Constant;
  *
  *  以上具体参照:http://www.2cto.com/kf/201205/129839.html
  */
-public class MyRender implements GLSurfaceView.Renderer {
+public class MyRender implements MyGLSurfaceView.Renderer {
 
     private Scene myScene = null;
 

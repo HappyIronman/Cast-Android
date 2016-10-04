@@ -1,7 +1,11 @@
 package tool.xpy.opengl_test.work.scene;
 
+import android.content.Intent;
+import android.util.Log;
+
 import javax.microedition.khronos.opengles.GL10;
 
+import tool.xpy.opengl_test.work.ui.MainActivity;
 import tool.xpy.opengl_test.work.util.Constant;
 
 /**
@@ -13,12 +17,12 @@ public class Ball implements Drawable{
     //phy value
 
     private float x = 1, y = 8, z = 2;              // coordinate 坐标
-    private float vx = 0, vy = 8, vz = 8;           // velocity    速度
+    private static float vx = 0, vy = 8, vz = 8;           // velocity    速度
     private float ax = 0, ay = 0, az = -9.8f;       // accelerated  加速度
 
     private long lastTime = -1;
     private double d;
-
+    private boolean isSent=false;
     // phy value
 
     private XRect xRect;
@@ -50,9 +54,20 @@ public class Ball implements Drawable{
             vx = vx * 0.6f;
             vy = vy * 0.6f;
             z = 0;
+            Log.e("B", "BOOM!");
+
+           if(!isSent)
+           {
+               SendMyBroadcast("BOOM",x,y,vx,vy,vz);
+               isSent=true;
+           }
+
+
         }
 
     }
+
+
 
     public void setA(float[] a_set){
         ax = a_set[0];
@@ -84,13 +99,17 @@ public class Ball implements Drawable{
             lastTime = System.currentTimeMillis();
             //if(refreshWindow != null) refreshWindow.print(gl, left, toString());
         }
-        xRect.draw(gl, left);
+
+         // System.out.println(vx+" "+vy+" "+vz);
+          //  System.out.println(x+" "+y+" "+z);
+            xRect.draw(gl, left);
     }
 
     public void reset(){
         x = 1; y = 8; z = 2;
         vx = 0; vy = 8; vz = 8;
         ax = 0; ay = 0; az = -9.8f;
+        isSent=false;
     }
 
     public String toString(){
@@ -99,4 +118,16 @@ public class Ball implements Drawable{
                 "P(" + x + "," + y + "," + z + ")";
     }
 
+
+
+    private void SendMyBroadcast(String boom, float x, float y, float vx, float vy, float vz) {
+        Intent intent=new Intent();
+        intent.setAction("BOOM");
+        intent.putExtra("x",x);
+        intent.putExtra("y",y);
+        intent.putExtra("vx",vx);
+        intent.putExtra("vy",vy);
+        intent.putExtra("vz",vz);
+        MainActivity.main_activity.sendBroadcast(intent);
+    }
 }
